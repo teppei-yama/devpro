@@ -19,15 +19,13 @@ import json
 import csv
 import datetime
 
-
 SERVER = 'localhost'
-#SERVER = '127.0.0.1'
 WAITING_PORT = 8765
 
 LOOP_WAIT = 3
 
 #DATA_DIR = '/home/pi/devpro3/data'
-DATA_DIR = r'C:\Users\IPUT shunpei kojima\OneDrive - nkz.ac.jp\ドキュメント\devpro3\csv_datalist'  #csv_datalistというフォルダをdevpro3の下に置くことで実行時にファイルがcsv_datalistの中にまとめられる。
+DATA_DIR = './'  #csv_datalistというフォルダをdevpro3の下に置くことで実行時にファイルがcsv_datalistの中にまとめられる。
 CSV_DATANAME = 'csv_datalist'
 now = datetime.datetime.now()
 time_str = now.strftime("%Y-%m-%d-%H-%M-%S")

@@ -4,6 +4,7 @@ from board import *
 import time
 import datetime
 import json
+import sys
 
 instance_dht = adafruit_dht.DHT11(pin=D4, use_pulseio=False)
 WAIT_INTERVAL = 2
