@@ -7,7 +7,7 @@ import json
 import sys
 
 instance_dht = adafruit_dht.DHT11(pin=D4, use_pulseio=False)
-WAIT_INTERVAL = 2
+WAIT_INTERVAL = 10
 WAIT_INTERVAL_RETRY = 5
 
 SERVER = 'localhost'
