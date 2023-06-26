@@ -4,7 +4,7 @@ import time
 import json
 import csv
 import datetime
-from flask import Flask
+from flask import Flask,render_template
 
 app = Flask(__name__)
 
@@ -15,13 +15,9 @@ LOOP_WAIT = 3
 
 count = 0
 
-@app.route("/hello",methods=["GET"])
-def hello_world():
-    return "<a href='../'>return top</a>"
-
 @app.route("/",methods=["GET"])
 def top_page():
-    return f"<a href='/hello'>go to hello</a><p>you visit hello {count} times</p>"
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
