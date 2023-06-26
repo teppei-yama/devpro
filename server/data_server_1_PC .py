@@ -25,7 +25,7 @@ WAITING_PORT = 8765
 LOOP_WAIT = 3
 
 #DATA_DIR = '/home/pi/devpro3/data'
-DATA_DIR = './'  #csv_datalistというフォルダをdevpro3の下に置くことで実行時にファイルがcsv_datalistの中にまとめられる。
+DATA_DIR = './csv'  #csv_datalistというフォルダをdevpro3の下に置くことで実行時にファイルがcsv_datalistの中にまとめられる。
 CSV_DATANAME = 'csv_datalist'
 now = datetime.datetime.now()
 time_str = now.strftime("%Y-%m-%d-%H-%M-%S")
@@ -46,7 +46,7 @@ def csv_read_iterator():
         for row in all_data_iter:
             print(row)
 
-def server_test(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
+def server(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
     import socket
     
     # socoket for waiting of the requests.
@@ -112,20 +112,17 @@ if __name__ == '__main__':
                 break
 
             option_key = sys.argv[count]
-#            print(option_key)
             if ("-h" == option_key):
                 count = count + 1
                 hostname_v = sys.argv[count]
-#                print(option_key, hostname_v)
 
             if ("-p" == option_key):
                 count = count + 1
                 waiting_port_v = int(sys.argv[count])
-#               print(option_key, waiting_port_v)
 
             count = count + 1
 
     print(hostname_v)
     print(waiting_port_v)
     
-    server_test(hostname_v, waiting_port_v)
+    server(hostname_v, waiting_port_v)
