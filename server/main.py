@@ -1,4 +1,4 @@
-import data_server_1_PC
+import data_server_PC
 import sys
 import time
 import json
@@ -18,15 +18,6 @@ count = 0
 @app.route("/",methods=["GET"])
 def top_page():
     return render_template('index.html')
-
-
-def index():
-    with open("datalist.csv") as f:
-        data_list = []
-        all_data_iter = csv.reader(f)
-        for row in all_data_iter:
-            data_list.append(row)
-    return render_template("index.html", input_from_python = data_list)
 
 
 if __name__ == '__main__':
