@@ -32,15 +32,15 @@
 // SOFTWARE.
 // 
 // 
-document.write("<br>") ;
-document.write("Start! (JavaScript part!!) in JavaScript file") ;
-document.write("<br>") ;
-document.write("JavaScriptのプログラムコードに引き渡された変数チェック") ;
-document.write("<br>") ;
+// document.write("<br>") ;
+// document.write("Start! (JavaScript part!!) in JavaScript file") ;
+// document.write("<br>") ;
+// document.write("JavaScriptのプログラムコードに引き渡された変数チェック") ;
+// document.write("<br>") ;
 
-for(let i = 0 ; i < global_values.length ; i++) {
-    document.write(global_values[i] + "<br>") ;
-}
+// for(let i = 0 ; i < global_values.length ; i++) {
+//     document.write(global_values[i] + "<br>") ;
+// }
 
 let sum_tempe = 0.0 ;
 let sum_humid = 0.0 ;
@@ -68,5 +68,5 @@ document.write(number_of_data) ;
 //document.write(sum_tempe);
 document.write(")<br>") ;
 
-alert("確認") ;
+// alert("確認") ;
 

@@ -30,8 +30,8 @@
 
         <script>
             let global_values = {{ input_from_python | tojson}};
-            document.write("Hello world(JavaScript part in HTML)")
-            document.write("<br>")
+            // document.write("Hello world(JavaScript part in HTML)")
+            // document.write("<br>")
         </script>
         <script src="{{ url_for('static', filename='js/average.js')}}">
         </script>
