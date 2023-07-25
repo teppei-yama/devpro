@@ -47,20 +47,25 @@ let sum_humid = 0.0 ;
 let number_of_data = 0 ;
 for(let i = 0 ; i < global_values.length ; i++) {
     let value = global_values[i] ;
-    sum_tempe = sum_tempe + value[0] ;
-    sum_humid = sum_humid + value[1] ;
+    let tempe = parseFloat(value[0]);
+    let humid = parseFloat(value[1]);
+    sum_tempe = sum_tempe + tempe;
+    sum_humid = sum_humid + humid;
     number_of_data = number_of_data + 1 ;
+    
 }
 
 document.write("------<br>平均<br>") ;
 const average_tempe = sum_tempe / number_of_data ;
 const average_humid = sum_humid / number_of_data ;
+
 document.write("温度:") ;
 document.write(average_tempe) ;
 document.write(" 湿度:") ;
 document.write(average_humid) ;
 document.write(" (データ数:") ;
 document.write(number_of_data) ;
+//document.write(sum_tempe);
 document.write(")<br>") ;
 
 alert("確認") ;
