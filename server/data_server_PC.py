@@ -18,6 +18,7 @@ import time
 import json
 import csv
 import datetime
+import fasteners
 
 SERVER = 'localhost'
 WAITING_PORT = 8765
@@ -27,6 +28,7 @@ LOOP_WAIT = 3
 #DATA_DIR = '/home/pi/devpro3/data'
 DATA_DIR = './csv'  #csv_datalistというフォルダをdevpro3の下に置くことで実行時にファイルがcsv_datalistの中にまとめられる。
 CSV_DATANAME = 'csv_datalist'
+LOCKFILE = f"{DATA_DIR}/{CSV_DATANAME}"
 
 def csv_write(data_list_list):
     now = datetime.datetime.now()
@@ -52,7 +54,23 @@ def csv_read_iterator(filename):
 
 def server(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
     import socket
-    
+    import threading
+
+    def recv_dhtdata(socket, client_address):
+        lock = fasteners.InterProcessLock(LOCKFILE)
+        data_r = socket_s_r.recv(1024)
+        data_r_str = data_r.decode('utf-8')
+        data_r_list = json.loads(data_r_str)
+        print('I (the server) have just received the data __'
+            + data_r_str + '__ from the client. '
+            + str(client_address))
+        print(type(data_r_list))
+        
+        time.sleep(LOOP_WAIT)
+        with lock:
+            csv_write(data_r_list)
+        socket.close()
+
     # socoket for waiting of the requests.
     # AF_INET     : IPv4
     # SOCK_STREAM : TCP
@@ -77,23 +95,9 @@ def server(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
             print('Connection from ' 
                 + str(client_address) 
                 + " has been established.")
-
-            data_r = socket_s_r.recv(1024)
-            data_r_str = data_r.decode('utf-8')
-            data_r_list = json.loads(data_r_str)
-            print('I (the server) have just received the data __'
-                + data_r_str + '__ from the client. '
-                + str(client_address))
-            print(type(data_r_list))
             
-            csv_write(data_r_list)
-            csv_read_iterator(f"{DATA_DIR}/{CSV_DATANAME}.csv")
-
-
-            time.sleep(LOOP_WAIT)
-
-            print("Now, closing the data socket.")
-            socket_s_r.close()
+            thread = threading.Thread(target=recv_dhtdata,args=(socket_s_r, client_address))
+            thread.start()
 
     except KeyboardInterrupt:
         print("Ctrl-C is hit!")
