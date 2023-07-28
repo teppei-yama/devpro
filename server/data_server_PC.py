@@ -40,13 +40,14 @@ def csv_write(data_list_list):
             f.write(row_str)
             f.write('\n')
 
-def csv_read_iterator():
+def csv_read_iterator(filename):
     ret_list = []
     with open(filename) as f:
         all_data_iter = csv.reader(f)
         for row in all_data_iter:
             ret_list.append(row)
             print(row)
+    return ret_list
 
 def server(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
     import socket

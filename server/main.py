@@ -22,13 +22,12 @@ count = 0
 #     [18.0, 5.0]
 # ]
 filename = "./server/csv/csv_datalist.csv"
-#filename = 'C:/Users/210503oikawa/Downloads/IoTデバイスプログラミングⅢ/devpro3_G1_sensor/server/csv/csv_datalist.csv'
 data_list = csv_read_iterator(filename)
 
 @app.route("/",methods=["GET"])
 def top_page():
-    
-    return render_template('index.html', input_from_python = data_list)
+    get_dt = datetime.datetime.now().replace(second=0, microsecond=0)
+    return render_template('index.html', get_date = get_dt,input_from_python = data_list)
 
 @app.route("/", methods=["POST"])
 def top_page2():
@@ -37,6 +36,7 @@ def top_page2():
     text_from_html_humid = request.form["new_humid"]
     print(text_from_html_tempe)
     print(text_from_html_humid)
+    get_dt = datetime.datetime.now().replace(second=0, microsecond=0)
     try:
         add_tempe = float(text_from_html_tempe)
         if add_tempe < -20 or add_tempe > 60:
@@ -59,7 +59,7 @@ def top_page2():
         return render_template("error.html", error_message=error_message)
     #add_humid = 0
     data_list.append([add_tempe, add_humid])
-    return render_template("index.html",input_from_python = data_list)
+    return render_template("index.html",get_date = get_dt, input_from_python = data_list)
 
 
 if __name__ == '__main__':
