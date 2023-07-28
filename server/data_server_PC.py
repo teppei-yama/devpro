@@ -27,11 +27,12 @@ LOOP_WAIT = 3
 #DATA_DIR = '/home/pi/devpro3/data'
 DATA_DIR = './csv'  #csv_datalistというフォルダをdevpro3の下に置くことで実行時にファイルがcsv_datalistの中にまとめられる。
 CSV_DATANAME = 'csv_datalist'
-now = datetime.datetime.now()
-time_str = now.strftime("%Y-%m-%d-%H-%M-%S")
-filename = f"{DATA_DIR}/{CSV_DATANAME}_{time_str}.csv"
 
 def csv_write(data_list_list):
+    now = datetime.datetime.now()
+    time_str = now.strftime("%Y-%m-%d-%H-%M-%S")
+    filename = f"{DATA_DIR}/{CSV_DATANAME}_{time_str}.csv"
+
     with open(filename, mode='a') as f:
         for row in data_list_list:
             data1 = row['temperature']
@@ -86,7 +87,7 @@ def server(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
             print(type(data_r_list))
             
             csv_write(data_r_list)
-            csv_read_iterator()
+            csv_read_iterator(f"{DATA_DIR}/{CSV_DATANAME}.csv")
 
 
             time.sleep(LOOP_WAIT)
