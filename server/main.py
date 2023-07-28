@@ -1,11 +1,11 @@
-from data_server_PC import csv_read_iterator
+import data_server_PC
 import sys
 import time
 import json
 import csv
 import datetime
 from flask import Flask,render_template, request
-
+import threading
 app = Flask(__name__)
 
 SERVER = 'localhost'
@@ -21,8 +21,8 @@ count = 0
 #     [24.0, 36.0],
 #     [18.0, 5.0]
 # ]
-filename = "./server/csv/csv_datalist.csv"
-data_list = csv_read_iterator(filename)
+filename = "./csv/csv_datalist.csv"
+data_list = data_server_PC.csv_read_iterator(filename)
 
 @app.route("/",methods=["GET"])
 def top_page():
@@ -86,5 +86,6 @@ if __name__ == '__main__':
 
             count = count + 1
 
-    #data_server_1_PC.server(hostname_v, waiting_port_v)
+    thread = threading.Thread(target=data_server_PC.server,args=(hostname_v, waiting_port_v))
+    thread.start()
     app.run(host = '0.0.0.0', port = 5001 ,debug = True)

@@ -8,6 +8,9 @@ class JsonData:
         self.socket_r_s = None
         self.node_s = 'localhost'
         self.port_s = 8765
+        print("Hostname:", self.node_s)
+        print("Port:", self.port_s)
+
 
 
     def connect_socket(self):

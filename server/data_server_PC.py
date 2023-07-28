@@ -19,11 +19,12 @@ import json
 import csv
 import datetime
 import fasteners
+import socket
 
 SERVER = 'localhost'
 WAITING_PORT = 8765
 
-LOOP_WAIT = 3
+LOOP_WAIT = 1
 
 #DATA_DIR = '/home/pi/devpro3/data'
 DATA_DIR = './csv'  #csv_datalistというフォルダをdevpro3の下に置くことで実行時にファイルがcsv_datalistの中にまとめられる。
@@ -31,9 +32,9 @@ CSV_DATANAME = 'csv_datalist'
 LOCKFILE = f"{DATA_DIR}/{CSV_DATANAME}"
 
 def csv_write(data_list_list):
-    now = datetime.datetime.now()
-    time_str = now.strftime("%Y-%m-%d-%H-%M-%S")
-    filename = f"{DATA_DIR}/{CSV_DATANAME}_{time_str}.csv"
+    #now = datetime.datetime.now()
+    #time_str = now.strftime("%Y-%m-%d-%H-%M-%S")
+    filename = f"{DATA_DIR}/{CSV_DATANAME}.csv"
 
     with open(filename, mode='a') as f:
         for row in data_list_list:
@@ -53,7 +54,7 @@ def csv_read_iterator(filename):
     return ret_list
 
 def server(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
-    import socket
+
     import threading
 
     def recv_dhtdata(socket, client_address):

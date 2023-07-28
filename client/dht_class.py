@@ -2,6 +2,7 @@
 #from board import *
 import time
 import datetime
+import random 
 
 class DHT11:
     def __init__(self):
@@ -35,7 +36,8 @@ class DHT11:
 
         while True:
             try:
-                tempe, humid = 50,50
+                tempe = round(random.uniform(25,35),1) 
+                humid = round(random.uniform(55,70),1)
                 now_str = str(datetime.datetime.now())
                 print("Temperature: %f  Humidity: %f" % (tempe, humid), now_str)            
                 data_list.append({'temperature': tempe, 'humidity': humid})
