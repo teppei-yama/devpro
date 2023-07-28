@@ -39,7 +39,7 @@ def top_page2():
     print(text_from_html_humid)
     try:
         add_tempe = float(text_from_html_tempe)
-        if add_tempe < 0 or add_tempe > 50:
+        if add_tempe < -20 or add_tempe > 60:
             raise ValueError("Temperature value must be between 0 and 50. Please enter a valid numeric value.")
     except ValueError as e:
         if "could not convert string to float" in str(e):
@@ -49,7 +49,7 @@ def top_page2():
         return render_template("error.html", error_message=error_message)
     try:
         add_humid = float(text_from_html_humid)
-        if add_humid < 0 or add_humid > 100:
+        if add_humid < 5 or add_humid > 95:
             raise ValueError("Humidity value must be between 0 and 100. Please enter a valid numeric value.")
     except ValueError as e:
         if "could not convert string to float" in str(e):
