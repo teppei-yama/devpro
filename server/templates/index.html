@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>G1_flask_test</title>
+    </head>
+
+    <body>
+        <h2>CSV List</h2>
+        <p>--------------------</p>
+        <p>データ取得時刻:{{get_date}}</p>
+        <p>--------------------</p>
+        <table border="1">
+            <tr>
+                <td>温度(℃)</td>
+                <td>湿度(パーセント)</td>
+            </tr>
+                {% for value in input_from_python %}
+            <tr>
+                <td>{{ value[0] }}</td>
+                <td>{{ value[1] }}</td>
+            </tr>
+                 {% endfor %}
+        </table>
+        <form action="/" method="POST">
+            <label for="temperature">追加データ温度</label>
+            <input id="temperature" type="text" name="new_tempe">
+            <label for="humidity">追加データ湿度</label>
+            <input id="humidity" type="text" name="new_humid">
+            <input type="submit" value="送信">
+        </form>
+
+        <script>
+            let global_values = {{ input_from_python | tojson}};
+            // document.write("Hello world(JavaScript part in HTML)")
+            // document.write("<br>")
+        </script>
+        <script src="{{ url_for('static', filename='js/average.js')}}">
+        </script>
+        <br>
+    </body>
+</html>
