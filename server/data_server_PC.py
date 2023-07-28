@@ -18,6 +18,7 @@ import time
 import json
 import csv
 import datetime
+import fasteners
 
 SERVER = 'localhost'
 WAITING_PORT = 8765
@@ -25,13 +26,15 @@ WAITING_PORT = 8765
 LOOP_WAIT = 3
 
 #DATA_DIR = '/home/pi/devpro3/data'
-DATA_DIR = './'  #csv_datalistというフォルダをdevpro3の下に置くことで実行時にファイルがcsv_datalistの中にまとめられる。
+DATA_DIR = './csv'  #csv_datalistというフォルダをdevpro3の下に置くことで実行時にファイルがcsv_datalistの中にまとめられる。
 CSV_DATANAME = 'csv_datalist'
-now = datetime.datetime.now()
-time_str = now.strftime("%Y-%m-%d-%H-%M-%S")
-filename = f"{DATA_DIR}/{CSV_DATANAME}_{time_str}.csv"
+LOCKFILE = f"{DATA_DIR}/{CSV_DATANAME}"
 
 def csv_write(data_list_list):
+    now = datetime.datetime.now()
+    time_str = now.strftime("%Y-%m-%d-%H-%M-%S")
+    filename = f"{DATA_DIR}/{CSV_DATANAME}_{time_str}.csv"
+
     with open(filename, mode='a') as f:
         for row in data_list_list:
             data1 = row['temperature']
@@ -40,15 +43,34 @@ def csv_write(data_list_list):
             f.write(row_str)
             f.write('\n')
 
-def csv_read_iterator():
+def csv_read_iterator(filename):
+    ret_list = []
     with open(filename) as f:
         all_data_iter = csv.reader(f)
         for row in all_data_iter:
+            ret_list.append(row)
             print(row)
+    return ret_list
 
-def server_test(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
+def server(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
     import socket
-    
+    import threading
+
+    def recv_dhtdata(socket, client_address):
+        lock = fasteners.InterProcessLock(LOCKFILE)
+        data_r = socket_s_r.recv(1024)
+        data_r_str = data_r.decode('utf-8')
+        data_r_list = json.loads(data_r_str)
+        print('I (the server) have just received the data __'
+            + data_r_str + '__ from the client. '
+            + str(client_address))
+        print(type(data_r_list))
+        
+        time.sleep(LOOP_WAIT)
+        with lock:
+            csv_write(data_r_list)
+        socket.close()
+
     # socoket for waiting of the requests.
     # AF_INET     : IPv4
     # SOCK_STREAM : TCP
@@ -73,23 +95,9 @@ def server_test(server_v1=SERVER, waiting_port_v1=WAITING_PORT):
             print('Connection from ' 
                 + str(client_address) 
                 + " has been established.")
-
-            data_r = socket_s_r.recv(1024)
-            data_r_str = data_r.decode('utf-8')
-            data_r_list = json.loads(data_r_str)
-            print('I (the server) have just received the data __'
-                + data_r_str + '__ from the client. '
-                + str(client_address))
-            print(type(data_r_list))
             
-            csv_write(data_r_list)
-            csv_read_iterator()
-
-
-            time.sleep(LOOP_WAIT)
-
-            print("Now, closing the data socket.")
-            socket_s_r.close()
+            thread = threading.Thread(target=recv_dhtdata,args=(socket_s_r, client_address))
+            thread.start()
 
     except KeyboardInterrupt:
         print("Ctrl-C is hit!")
@@ -112,20 +120,17 @@ if __name__ == '__main__':
                 break
 
             option_key = sys.argv[count]
-#            print(option_key)
             if ("-h" == option_key):
                 count = count + 1
                 hostname_v = sys.argv[count]
-#                print(option_key, hostname_v)
 
             if ("-p" == option_key):
                 count = count + 1
                 waiting_port_v = int(sys.argv[count])
-#               print(option_key, waiting_port_v)
 
             count = count + 1
 
     print(hostname_v)
     print(waiting_port_v)
     
-    server_test(hostname_v, waiting_port_v)
+    server(hostname_v, waiting_port_v)

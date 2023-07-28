@@ -4,8 +4,8 @@ import sys
 if __name__ == '__main__':
     print("Start if __name__ == '__main__'")
 
-    # SERVER = 'localhost'
-    SERVER = '10.192.138.231'
+    SERVER = 'localhost'
+    #SERVER = '10.192.138.231'
     WAITING_PORT = 8765
 
     sys_argc = len(sys.argv)
@@ -28,8 +28,8 @@ if __name__ == '__main__':
 
     print("Hostname:", hostname_v)
     print("Port:", waiting_port_v)
-
-    data_json = JsonData()
-    data_json.connect_socket()
-    data_json.send_dht_data()
-    data_json.close_socket()
+    while True:
+        data_json = JsonData()
+        data_json.connect_socket()
+        data_json.send_dht_data()
+        data_json.close_socket()

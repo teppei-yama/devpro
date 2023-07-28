@@ -6,7 +6,7 @@ class JsonData:
     def __init__(self):
         self.dht = DHT11()
         self.socket_r_s = None
-        self.node_s = '10.192.138.231'
+        self.node_s = 'localhost'
         self.port_s = 8765
 
 
