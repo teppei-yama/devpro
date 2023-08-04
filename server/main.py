@@ -15,18 +15,13 @@ LOOP_WAIT = 3
 
 count = 0
 
-# data_list = [
-#     [35.2, 43.0],
-#     [27.5, 32.0],
-#     [24.0, 36.0],
-#     [18.0, 5.0]
-# ]
 filename = "./csv/csv_datalist.csv"
-data_list = data_server_PC.csv_read_iterator(filename)
+
 
 @app.route("/",methods=["GET"])
 def top_page():
     get_dt = datetime.datetime.now().replace(second=0, microsecond=0)
+    data_list = data_server_PC.csv_read_iterator(filename)
     return render_template('index.html', get_date = get_dt,input_from_python = data_list)
 
 @app.route("/", methods=["POST"])
